@@ -1,19 +1,19 @@
 import React from 'react';
 import styles from './Home.module.css';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useHistory } from 'react-router-dom';
 import Card from '../../components/shared/Card/Card.jsx';
 import Button from '../../components/shared/Button/Button.jsx';
 
 const Home = () => {
-  const signInLinkStyle = {
-    color: '#0077ff',
-    fontWeight: 'bold',
-    textDecoration: 'none',
-    marginLeft: '10px',
-  };
-  const history = useNavigate();
+  // const signInLinkStyle = {
+  //   color: '#0077ff',
+  //   fontWeight: 'bold',
+  //   textDecoration: 'none',
+  //   marginLeft: '10px',
+  // };
+  const history = useHistory();
   function startRegister() {
-    history('/register');
+    history.push('/authenticate');
   }
   return (
     <div className={styles.cardWrapper}>
@@ -30,7 +30,7 @@ const Home = () => {
           <span className={styles.hasInvite}>
             Have an invite text?
           </span>
-          <Link to="/login" style={signInLinkStyle}>Sign In</Link>
+          {/* <Link to="/login" style={signInLinkStyle}>Sign In</Link> */}
         </div>
       </Card>
     </div>

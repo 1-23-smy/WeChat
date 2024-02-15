@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import Authenticate from './pages/Authenticate/Authenticate.jsx';
 import Activate from './pages/Activate/Activate.jsx';
 import Rooms from './pages/Rooms/Rooms.jsx';
+import { useSelector } from 'react-redux';
 const App = () => {
   // const navigate=useNavigate()
   return (
@@ -40,12 +41,12 @@ const App = () => {
 }
 
 export default App
-const isAuth = false
-const user={
-  activated:true
-}
+// const isAuth = false
+// const user={
+//   activated:true
+// }
 const GuestRoute = ({ children, ...rest }) => {
-  // const { isAuth } = useSelector((state) => state.auth);
+  const { isAuth } = useSelector((state) => state.auth);
   
   return (
     <Route
@@ -67,7 +68,7 @@ const GuestRoute = ({ children, ...rest }) => {
 };
 
 const SemiProtectedRoute = ({ children, ...rest }) => {
-  // const { user, isAuth } = useSelector((state) => state.auth);
+  const { user, isAuth } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
@@ -95,7 +96,7 @@ const SemiProtectedRoute = ({ children, ...rest }) => {
 };
 
 const ProtectedRoute = ({ children, ...rest }) => {
-  // const { user, isAuth } = useSelector((state) => state.auth);
+  const { user, isAuth } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}

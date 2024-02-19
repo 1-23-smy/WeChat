@@ -6,7 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setAvatar } from '../../../store/activateSlice';
 import { activate } from '../../../http';
 import { setAuth } from '../../../store/authSlice';
+import Loader from '../../../components/shared/Loader/Loader';
 const StepAvatar = ({onNext}) => {
+  const [loading,setLoading]=useState(false)
   const dispatch = useDispatch();
   const { name, avatar } = useSelector((state) => state.activate);
   const [image, setImage] = useState('/images/monkey-avatar.png');
@@ -20,6 +22,8 @@ const StepAvatar = ({onNext}) => {
     };
   }
   async function submit() {
+    if(!name || !avatar) alert("Set avatar or name");
+    setLoading(true)
     try {
       const { data } = await activate({ name, avatar });
       if (data.auth) {
@@ -29,7 +33,12 @@ const StepAvatar = ({onNext}) => {
     } catch (err) {
       console.log(err);
     }
+    finally{
+      setLoading(false)
+    }
   }
+
+  if(loading) return <Loader message={"Activation in progress..."}/>
   return (
       <>
       <Card title={`Okay, ${name}`} icon="monkey-emoji">

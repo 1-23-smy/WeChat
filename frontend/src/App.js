@@ -9,10 +9,14 @@ import Authenticate from './pages/Authenticate/Authenticate.jsx';
 import Activate from './pages/Activate/Activate.jsx';
 import Rooms from './pages/Rooms/Rooms.jsx';
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh.js';
+import Loader from './components/shared/Loader/Loader.js';
 const App = () => {
+  const {loading}=useLoadingWithRefresh()
   // const navigate=useNavigate()
-  return (
-    
+ 
+  return loading ? <Loader message="Loading... please wait" /> :(
     <Router>
       <Navigation />
       <Switch>
@@ -38,7 +42,10 @@ const App = () => {
     </Router>
      
   )
+  
 }
+
+
 
 export default App
 // const isAuth = false

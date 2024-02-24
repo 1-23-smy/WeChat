@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useLoadingWithRefresh } from './hooks/useLoadingWithRefresh.js';
 import Loader from './components/shared/Loader/Loader.js';
+import Room from './pages/Room/Room.jsx';
 const App = () => {
   const {loading}=useLoadingWithRefresh()
   // const navigate=useNavigate()
@@ -31,6 +32,9 @@ const App = () => {
         </SemiProtectedRoute>
 <ProtectedRoute path='/rooms'>
     <Rooms/>
+</ProtectedRoute>
+<ProtectedRoute path='/room/:id'>
+    <Room/>
 </ProtectedRoute>
         {/* <Route path="/register">
           <Register />

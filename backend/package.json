@@ -8,16 +8,17 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "cookie-parser": "^1.4.6",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.1",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "jimp": "^0.22.10",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.1.1",
-    "twilio": "^4.21.0"
+    "jimp": "^0.16.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.13.3",
+    "socket.io": "^4.4.0",
+    "twilio": "^3.66.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "nodemon": "^2.0.12"
   }
 }

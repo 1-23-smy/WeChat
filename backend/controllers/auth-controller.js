@@ -1,46 +1,41 @@
-const otpService = require("../services/otp-sevice");
-const hashService = require('../services/hash-service.js')
-const userService = require('../services/user-service.js')
-const tokenService = require('../services/token-service.js')
-const UserDto = require('../dtos.js/user-dto.js');
+const otpService = require('../services/otp-service');
+const hashService = require('../services/hash-service');
+const userService = require('../services/user-service');
+const tokenService = require('../services/token-service');
+const UserDto = require('../dtos/user-dto');
+
 class AuthController {
-    async sendOTP(req, res) {
-        const { phone } = req.body
-
+    async sendOtp(req, res) {
+        const { phone } = req.body;
         if (!phone) {
-            res.status(400).json({
-                msg: "Phone number is required"
-            })
+            res.status(400).json({ message: 'Phone field is required!' });
         }
-        const otp = await otpService.generateOTP()
 
+        const otp = await otpService.generateOtp();
 
-        const ttl = 1000 * 60 * 2//2min
+        const ttl = 1000 * 60 * 2; // 2 min
         const expires = Date.now() + ttl;
-        const data = `${phone}.${otp}.${expires}`
-        const hash = hashService.hashOtp(data)
+        const data = `${phone}.${otp}.${expires}`;
+        const hash = hashService.hashOtp(data);
 
-        //send OTP
+        // send OTP
         try {
-            // await otpService.sendBySms(phone, otp)
-            console.log(otp);
-            return res.json({
+            // await otpService.sendBySms(phone, otp);
+            res.json({
                 hash: `${hash}.${expires}`,
-                phone
-            })
-        } catch (error) {
-            console.log(error);
-            return res.status(400).json({ msg: "Message sending failed" })
+                phone,
+                otp,
+            });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ message: 'message sending failed' });
         }
-
-        res.json({ hash: hash })
-
     }
+
     async verifyOtp(req, res) {
         const { otp, hash, phone } = req.body;
         if (!otp || !hash || !phone) {
             res.status(400).json({ message: 'All fields are required!' });
-
         }
 
         const [hashedOtp, expires] = hash.split('.');
@@ -52,8 +47,6 @@ class AuthController {
         const isValid = otpService.verifyOtp(hashedOtp, data);
         if (!isValid) {
             res.status(400).json({ message: 'Invalid OTP' });
-
-
         }
 
         let user;
@@ -73,18 +66,21 @@ class AuthController {
         });
 
         await tokenService.storeRefreshToken(refreshToken, user._id);
+
         res.cookie('refreshToken', refreshToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
         });
+
         res.cookie('accessToken', accessToken, {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
         });
-        const userDto = new UserDto(user);
-        res.json({ user: userDto, auh: true });
 
+        const userDto = new UserDto(user);
+        res.json({ user: userDto, auth: true });
     }
+
     async refresh(req, res) {
         // get refresh token from cookie
         const { refreshToken: refreshTokenFromCookie } = req.cookies;
@@ -140,20 +136,15 @@ class AuthController {
         res.json({ user: userDto, auth: true });
     }
 
-    async logout(req,res){
-        //delete refresh token from db
-        const {refreshToken}=req.cookies
-        await tokenService.removeToken(refreshToken)
-        
-        res.clearCookie('refreshToken')
-        res.clearCookie('accessToken')
-
-        res.json({
-            user:null,
-            auth:false
-        })
+    async logout(req, res) {
+        const { refreshToken } = req.cookies;
+        // delete refresh token from db
+        await tokenService.removeToken(refreshToken);
+        // delete cookies
+        res.clearCookie('refreshToken');
+        res.clearCookie('accessToken');
+        res.json({ user: null, auth: false });
     }
-
 }
 
-module.exports = new AuthController()
+module.exports = new AuthController();

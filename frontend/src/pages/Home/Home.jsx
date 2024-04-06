@@ -24,7 +24,7 @@ const Home = () => {
           gradually to make sure nothing breaks.
         </p>
         <div>
-          <Button onClick={startRegister} text="Let's Go" />
+          <Button onClick={startRegister} className={styles.button} text="Let's Go" />
         </div>
         <div className={styles.signinWrapper}>
           <span className={styles.hasInvite}>

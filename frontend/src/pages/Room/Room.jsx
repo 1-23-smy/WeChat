@@ -32,6 +32,7 @@ const Room = () => {
   }, [isMuted]);
 
   const handManualLeave = () => {
+  
     history.push('/rooms');
   };
 
@@ -52,7 +53,7 @@ const Room = () => {
       </div>
       <div className={styles.clientsWrap}>
         <div className={styles.header}>
-          {room && <h2 className={styles.topic}>{room.topic}</h2>}
+          {room && <h2 className={styles.topic}>{room?.topic}</h2>}
           <div className= {styles.peopleWrapper}>
             <BsPeople size={'2rem'}/>
             <span className= {styles.lengthOfPeople}>{clients.length}</span>
